@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // let stores = [
+        //     { id: 1, name: "Milk", count: 100 },
+        //     { id: 2, name: "Yakult", count: 100 },
+        //     { id: 3, name: "Butter", count: 100, }
+        // ];
+        // let carts = [];
+        // let text = prompt("mời nhập C.R.U.D");
+        // if (text == "C") {
+        //     let produce = prompt("nhập tên sản phẩm");
+        //     for (let i = 0; i < stores.length; i++) {
+        //         if (produce == stores[i].name) {
+        //             carts.push(stores[i]);
+        //             console.log(carts);
+        //         }
+        //     }
+        // }
+
+        let stores = [
+            { id: 1, name: "Milk", count: 100 }, 
+            { id: 2, name: "Yakult", count: 100 }, 
+            { id: 3, name: "Butter", count: 100 }
+        ];
+        let carts = [];
+
+        function displayProducts() {
+            console.log("Danh sách sản phẩm trong cửa hàng:");
+            stores.forEach(product => {
+                console.log(`ID: ${product.id}, Tên: ${product.name}, Số lượng: ${product.count}`);
+            });
+
+            console.log("\nDanh sách sản phẩm trong giỏ hàng:");
+            carts.forEach(item => {
+                console.log(`ID: ${item.id}, Tên: ${item.name}, Số lượng: ${item.quantity}`);
+            });
+        }
+
+        function buyProduct(productName) {
+            const product = stores.find(item => item.name === productName);
+            if (product && product.count > 0) {
+                carts.push({ id: product.id, name: product.name, quantity: 1 });
+                product.count--;
+                console.log(`${productName} đã được thêm vào giỏ hàng.`);
+            } else {
+                console.log(`${productName} không có sẵn hoặc đã hết hàng.`);
+            }
+        }
+
+        function updateCartItemQuantity(index, newQuantity) {
+            if (index >= 0 && index < carts.length) {
+                const cartItem = carts[index];
+                const product = stores.find(item => item.id === cartItem.id);
+                if (product) {
+                    const difference = newQuantity - cartItem.quantity;
+                    if (difference <= product.count) {
+                        cartItem.quantity = newQuantity;
+                        product.count -= difference;
+                        console.log("Cập nhật số lượng sản phẩm trong giỏ hàng thành công.");
+                    } else {
+                        console.log("Không đủ số lượng sản phẩm trong cửa hàng để cập nhật.");
+                    }
+                }
+            } else {
+                console.log("Vị trí không hợp lệ trong giỏ hàng.");
+            }
+        }
+
+        function removeCartItem(index) {
+            if (index >= 0 && index < carts.length) {
+                const cartItem = carts[index];
+                const product = stores.find(item => item.id === cartItem.id);
+                if (product) {
+                    product.count += cartItem.quantity;
+                    carts.splice(index, 1);
+                    console.log("Xóa sản phẩm khỏi giỏ hàng thành công.");
+                }
+            } else {
+                console.log("Vị trí không hợp lệ trong giỏ hàng.");
+            }
+        }
+
+        function main() {
+            while (true) {
+                const option = prompt("Nhập C (mua hàng), R (hiển thị), U (cập nhật), D (xóa), E (thoát):").toUpperCase();
+
+                switch (option) {
+                    case "C":
+                        const productName = prompt("Nhập tên sản phẩm bạn muốn mua:");
+                        buyProduct(productName);
+                        break;
+
+                    case "R":
+                        displayProducts();
+                        break;
+
+                    case "U":
+                        const updateIndex = parseInt(prompt("Nhập vị trí sản phẩm bạn muốn cập nhật:"));
+                        const newQuantity = parseInt(prompt("Nhập số lượng mới:"));
+                        updateCartItemQuantity(updateIndex, newQuantity);
+                        break;
+
+                    case "D":
+                        const removeIndex = parseInt(prompt("Nhập vị trí sản phẩm bạn muốn xóa:"));
+                        removeCartItem(removeIndex);
+                        break;
+
+                    case "E":
+                        console.log("Cảm ơn bạn đã đến với Rikkei Stores.");
+                        return;
+
+                    default:
+                        console.log("Lựa chọn không hợp lệ. Vui lòng thử lại.");
+                }
+            }
+        }
+
+        main();
+
+    </script>
+</body>
+
+</html>
